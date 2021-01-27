@@ -237,8 +237,9 @@ public class Server
 			}
 			catch (IOException e) 
 			{
-				// potential bug here. no way to deal with connetion failure properly.
-				System.out.println("One of the clients has disconnected. Ending Game.");
+				// If communication error occurs return to commenceTurn method to deal with ending the program.
+				// Returning any flag is possible here as commenceTurn will call an IO function and encounter same error.
+				return -1;
 			}
 		}
 		return (game.checkWin(rowPosition, columnPosition-1, player)) ? 1 : 0;
