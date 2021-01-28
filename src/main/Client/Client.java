@@ -1,3 +1,5 @@
+package Client;
+
 // A Java program for a Client 
 import java.net.*;
 import java.util.Scanner;
@@ -13,7 +15,7 @@ public class Client
 	/*
 	 * Client constructor.
 	 */
-	public Client(String address, int port) 
+	public Client(String address, int port)
 	{
 		try
 		{ 

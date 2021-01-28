@@ -1,4 +1,7 @@
+package Server;
+
 import Game.Game;
+import Game.InvalidServerGameInputException;
 
 // A Java program for a Server 
 import java.net.*;
@@ -24,7 +27,7 @@ public class Server
 		{ 
 			this.server = new ServerSocket(port); 
 			System.out.println("Server started"); 
-		} 
+		}
 		catch(IOException i) 
 		{ 
 			System.out.println("Problem starting server. Perhaps port " + 
@@ -88,11 +91,9 @@ public class Server
 	/*
 	 * Method to commence the game.
 	 */
-	private void commenceGame(int width, int heigth, int counter) 
+	private void commenceGame(Game game, int width) 
 	{
 		try {
-			// Set up new game object.
-			Game game = new Game(width, heigth, counter);
 			
 			// Randomly choose a person to go second.
 			Random random = new Random();
@@ -180,7 +181,7 @@ public class Server
 			objectOutputStream1.close();
 			objectOutputStream2.close();
 		} 
-		catch(IOException i) 
+		catch(IOException i)
 		{
 			System.out.println("One of the clients has disconnected. Ending Game.");
 			return;
@@ -272,6 +273,16 @@ public class Server
 		
 		Server server = new Server(50); 
 		if(server.acceptClients() == -1) return;
-		server.commenceGame(width, heigth, counter);
+		
+		Game game;
+		try 
+		{
+			game = new Game(width, heigth, counter);
+		} catch (InvalidServerGameInputException e) 
+		{
+			System.out.println("Counter value must be less than height and width for game to commence.");
+			return;
+		}
+		server.commenceGame(game, width);
 	} 
 } 
