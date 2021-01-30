@@ -9,11 +9,11 @@ Instructions include:
 * The width of the game board is 9.
 * The heigth of the game board is 5.
 
-The Game class has been extended to allow heigth, width and counter variations of all values with the only restriction being that the counter value cannot be larger than the width or heigth. The Game.java program checks for this (server side) and will throw an exception if the user does not operate within this constraint throwing a custom InvalidServerGameInputException. To change these default values a user can amended the main method of the Server.java class.
+The ```src/Game/Game.java``` class has been extended to allow heigth, width and counter variations of all values with the only restriction being that the counter value cannot be larger than the width or heigth. The Game.java program checks for this (server side) and will throw an exception if the user does not operate within this constraint throwing a custom InvalidServerGameInputException. To change these default values a user can amended the main method of the ```src/Server/Server.java``` class.
 
-The Game class is thoroughy tested in the ```/src/test/Game/GameTest.java``` class. The easiest way to run the tests is by importing the project to Eclipse or another Java IDE and running the test class from there.
+The Game class is thoroughy tested in the ```/src/test/Game/GameTest.java``` class. The easiest way to run the JUNIT tests is by importing the project to Eclipse or another Java IDE and running the test class from there.
 
-Additionally, because it is more difficult to unit test socket connections, a series of tests have been run to test the robustness of the program: 
+Additionally, because it is more difficult to unit test socket connections, a series of program tests have been run to test the robustness of the program: 
 * When client-server disconnections occur abruptly on either side.
 * Invalid inputs are sent to the server from the client.
 * The client wishes to forefeit/end the game manually.
