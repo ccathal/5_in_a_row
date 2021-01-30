@@ -1,9 +1,9 @@
 package Client;
 
+import java.io.*;
 // A Java program for a Client 
 import java.net.*;
-import java.util.Scanner;
-import java.io.*; 
+import java.util.Scanner; 
 
 public class Client 
 {
@@ -14,23 +14,28 @@ public class Client
 
 	/*
 	 * Client constructor.
+	 * @param address String value of the server address.
+	 * @param port Integer value of the server port.
+	 * @exception IOException Exception when connection falure to server.
 	 */
 	public Client(String address, int port)
 	{
 		try
 		{ 
-			socket = new Socket(address, port); 
-			System.out.println("Connected");
+			socket = new Socket(address, port);
+			System.out.println("\nConnection to the Server has been successful!\n");
 		} 
 		catch(IOException i) 
 		{ 
 			System.out.println("Connection problem to server on port " + port + ". Please ensure port number is correct.");
-			return;
+			System.exit(0);
 		} 
 	}
 	
 	/*
 	 * Method for client for game setup.
+	 * @param name String of the player name to be sent to server.
+	 * IOException IOException Exception when connection failure between client and server.
 	 */
 	private void initiateGameStart(String name)
 	{
@@ -46,20 +51,25 @@ public class Client
 			while(welcome.equals(""))
 			{
 				welcome = input.readUTF();
-				System.out.println(welcome);
+				System.out.println("\n" + welcome + "\n");
 			}
 		} 
 		catch(IOException i) 
 		{ 
 			System.out.println("Connection Problem. Ending Game.");
-			return;
+			System.exit(0);
 		} 
 	}
 	
 	/*
 	 * Method for the game.
+	 * @param scanner Scanner object for taking in command line arguments from user.
+	 * @param name String name of player.
+	 * @exception ClassNotFoundException Exception thrown 
+	 * 		when client accepts board array over objectinputstream
+	 * @exception IOException Exception when client - server connection fails.
 	 */
-	private int startGame(Scanner scanner, String name)
+	private void startGame(Scanner scanner, String name) throws ClassNotFoundException
 	{
 		try
 		{
@@ -69,19 +79,8 @@ public class Client
 			while(!gameOver)
 			{
 				// Each game turn the server will send the board array to the client.
-				int[][] board;
-				//int width;
-				//int heigth;
-				
-				try {
-					board = (int[][]) objectInputStream.readObject();
-					printBoard(board);
-					//heigth = board.length;
-					//width = board[0].length;
-				}
-				catch (ClassNotFoundException e1) {
-					System.out.println(e1);
-				}
+				int[][] board = (int[][]) objectInputStream.readObject();
+				printBoard(board);
 				
 				// The server sends the clients game move.
 				String move = "";
@@ -106,26 +105,30 @@ public class Client
 							System.out.println("Ending the game. Good bye!");
 							out.writeUTF(positionStr);
 							scanner.close();
-							return 0;
+							return;
 						}
 						else { // check the number input is a valid integer.
 							try
 							{
 								position = Integer.parseInt(positionStr);
+								
+								// Client only checks for valid integer.
+								// Integer out of range errors dealt with as server.
+								// This allows the game to be designed as flexible as possible.
+								// No valid integer will prompt the client to re-enter a value.
+								if(position != -1)
+								{
+									out.writeUTF(Integer.toString(position));
+									correctInput = true;
+								}
+								else
+								{
+									System.out.println("Invalid input. Please input an integer within range.");
+								}
 							}
 							catch(NumberFormatException e)
 							{
-								System.out.println("Invalid input. Please input an integer.");
-							}
-						
-							// Client only checks for valid integer.
-							// Integer out of range errors dealt with as server.
-							// This allows the game to be designed as flexible as possible.
-							// No valid integer will prompt the client to re-enter a value.
-							if(position != -1)
-							{
-								out.writeUTF(Integer.toString(position));
-								correctInput = true;
+								System.out.println("Invalid input. Please input an integer, not String.");
 							}
 						}
 					}
@@ -149,25 +152,23 @@ public class Client
 					System.out.println(name + ", the other competitor has forteited the game.\nYour are the nominated winner! Good bye.");
 					gameOver = true;
 				}
+				System.out.println();
 			}
 	
 			// Close connections.
-			input.close();
-			out.close();
 			socket.close();
-			objectInputStream.close();
 			scanner.close();
 		}
 		catch(IOException i) 
 		{ 
 			System.out.println("Connection Problem. Ending Game.");
-			return 0;
+			return;
 		}
-		return 0; 
 	}
 
 	/*
 	 * Method to print board to command line.
+	 * @param board 2D array of game board print method. 
 	 */
 	private void printBoard(int[][] board)
 	{
@@ -201,7 +202,7 @@ public class Client
 	/*
 	 * Client main method.
 	 */
-	public static void main(String args[]) 
+	public static void main(String args[]) throws ClassNotFoundException 
 	{
 		Client client = new Client("127.0.0.1", 50);
 		

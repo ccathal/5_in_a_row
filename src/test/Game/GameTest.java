@@ -1,3 +1,5 @@
+package test.Game;
+
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;

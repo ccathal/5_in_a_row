@@ -2,6 +2,10 @@ package Game;
 
 /*
  * Custom exception when server input invalid game dimensions.
+ * 
+ * @author Cathal Corbett
+ * @version 1.0
+ * @since 30/01/2021
  */
 public class InvalidServerGameInputException extends Exception
 {

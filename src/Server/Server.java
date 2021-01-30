@@ -8,25 +8,34 @@ import java.net.*;
 import java.util.Random;
 import java.io.*; 
 
+/*
+ * Server class for game of Connect 4 & variations.
+ * 
+ * @author Cathal Corbett
+ * @version 1.0
+ * @since 30/01/2021
+ */
 public class Server 
 {
-	private ServerSocket server  = null;
-	private Socket socket1 = null;
-	private Socket socket2 = null;	
-	private DataInputStream in1	 = null;
-	private DataInputStream in2	 = null;	
-	private DataOutputStream out1 = null;
-	private DataOutputStream out2 = null;
+	private ServerSocket server  	= null;
+	private Socket socket1 			= null;
+	private Socket socket2 			= null;	
+	private DataInputStream in1	 	= null;
+	private DataInputStream in2	 	= null;	
+	private DataOutputStream out1 	= null;
+	private DataOutputStream out2 	= null;
 	
 	/*
 	 * Server constructor.
+	 * @param part Integer port number for connection to occur over.
+	 * @exception IOException Exception when server port inputted is not available.
 	 */
 	public Server(int port) 
 	{
 		try
 		{ 
 			this.server = new ServerSocket(port); 
-			System.out.println("Server started"); 
+			System.out.println("Server started."); 
 		}
 		catch(IOException i) 
 		{ 
@@ -38,7 +47,8 @@ public class Server
 	
 	/*
 	 * Method for server to accept 2 clients.
-	 * Returns integer for the main method to check if a connection failure occured (-1).
+	 * @return integer for the main method to check if a connection failure occured (-1).
+	 * @exception IOException Exception when connection issue occurs between client and server.
 	 */
 	private int acceptClients()
 	{	
@@ -90,8 +100,10 @@ public class Server
 	
 	/*
 	 * Method to commence the game.
+	 * @game Game object created for the game to commence.
+	 * @exception IOException Exception when connection issue occurs between client and server.
 	 */
-	private void commenceGame(Game game, int width) 
+	private void commenceGame(Game game) 
 	{
 		try {
 			
@@ -106,26 +118,27 @@ public class Server
 			int win = 0;
 			while(!gameOver) // loop until game over (win, lose, ended by client).
 			{
+				printBoard(game.getBoard());
 
 				// ObjectOutputStreams need to be reset each time the board object is sent.
 				objectOutputStream1.reset();
 				objectOutputStream2.reset();
 				
 				// The coinFlip alernates each round indicating the players turn.
-				coinFlip = coinFlip%2==1 ? 0 : 1;				
+				coinFlip = coinFlip%2==1 ? 0 : 1;
 				if(coinFlip == 0) // player 1
 				{
 					// Write board object to waiting player (player 2) and issue wait message.
 					objectOutputStream2.writeObject(game.getBoard());
 					out2.writeUTF("wait");
 					// Enter commenceTurn method for other player (player 1)
-					win = commenceTurn(objectOutputStream1, out1, in1, width, game, coinFlip+1);
+					win = commenceTurn(objectOutputStream1, out1, in1, game, coinFlip+1);
 				}
 				else // player 2
 				{
 					objectOutputStream1.writeObject(game.getBoard());
 					out1.writeUTF("wait");
-					win = commenceTurn(objectOutputStream2, out2, in2, width, game, coinFlip+1);
+					win = commenceTurn(objectOutputStream2, out2, in2, game, coinFlip+1);
 				}
 				
 				/*
@@ -144,11 +157,13 @@ public class Server
 						objectOutputStream2.writeObject(game.getBoard());
 						if(coinFlip == 0) // player 1 win
 						{
+							System.out.println("Player 1 wins.");
 							out1.writeUTF("winner");
 							out2.writeUTF("loser");
 						}
 						else // player 2 win
 						{
+							System.out.println("Player 1 wins.");
 							out2.writeUTF("winner");
 							out1.writeUTF("loser");
 						}
@@ -157,11 +172,13 @@ public class Server
 					{
 						if(coinFlip == 0) // player 2 wins by forfeiture
 						{
+							System.out.println("Player 1 forefeits.");
 							objectOutputStream2.writeObject(game.getBoard());
 							out2.writeUTF("end");
 						}
 						else // player 1 wins by forfeiture
 						{
+							System.out.println("Player 2 forefeits.");
 							objectOutputStream1.writeObject(game.getBoard());
 							out1.writeUTF("end");
 						}
@@ -172,14 +189,8 @@ public class Server
 			
 			// Close connections.
 			socket1.close();
-			socket2.close(); 
-			in1.close(); 
-			in2.close();
-			out1.close(); 
-			out2.close();
+			socket2.close();
 			server.close();
-			objectOutputStream1.close();
-			objectOutputStream2.close();
 		} 
 		catch(IOException i)
 		{
@@ -190,9 +201,18 @@ public class Server
 	
 	/*
 	 * Method for the Server to take care of clients game turn.
+	 * @param objectOutputStream ObjectOutputStream of player whose turn it is. 
+	 * @param out DataOutputStream of player whose turn it is. 
+	 * @param in DataInputStream of player whose turn it is. 
+	 * @param game Game object to add to board, check win etc.
+	 * @param player Integer of player whos turn it is.
+	 * @exception IOException when connection issue occurs.
+	 * @return int Indicating if win has occured (1), no win (0), 
+	 * 		or error (-1) which the main returning method will take care of.
 	 */
-	private int commenceTurn(ObjectOutputStream objectOutputStream, DataOutputStream out, DataInputStream in, int width, Game game, int player)
+	private int commenceTurn(ObjectOutputStream objectOutputStream, DataOutputStream out, DataInputStream in, Game game, int player)
 	{
+		int width = game.getBoard()[0].length;
 		boolean completedTurn = false;
 		int columnPosition = -1;
 		int rowPosition = -1;
@@ -247,19 +267,21 @@ public class Server
 	}
 	
 	/*
-	 * Method print board for testing purposes
+	 * Method to print board to command line.
+	 * @param board 2D array of game board print method. 
 	 */
 	private void printBoard(int[][] board)
 	{
-		System.out.println("Printing Current Board:"); 
+		System.out.println("\nPrinting Current Board:");
 		for (int row = 0; row < board.length; row++) 
 		{
 			for (int col = 0; col < board[row].length; col++) 
 			{
-				System.out.print(board[row][col] + "\t");
+				System.out.print("[ " + board[row][col] + " ] ");
 			}
 			System.out.println(); 
 		}
+		System.out.println(); 
 	}
 
 	/*
@@ -283,6 +305,6 @@ public class Server
 			System.out.println("Counter value must be less than height and width for game to commence.");
 			return;
 		}
-		server.commenceGame(game, width);
+		server.commenceGame(game);
 	} 
 } 
