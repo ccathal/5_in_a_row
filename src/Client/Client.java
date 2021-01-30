@@ -96,7 +96,7 @@ public class Client
 					while(!correctInput) 
 					{
 						scanner = new Scanner(System.in);
-						System.out.print(name + ", please enter where you would like your position: ");
+						System.out.print(name + ", please enter where you would like your position ('end' to end the game): ");
 						String positionStr = scanner.next();
 						
 						// Check if the user wants to quit the game.
