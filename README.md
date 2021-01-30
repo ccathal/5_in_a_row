@@ -38,22 +38,22 @@ Bash scripts are provided under the ```src/``` directory. The user should run al
 
 The below images show initiating the Client-Server connection, client valid and invalid inputs and a client forefitting the game by 'end' input.
 
-![Game Clients][./Game_1_Senario/img1.png]
+![Game Clients][Game_1_Senario/img1.png]
 
-![Game Server][./Game_1_Senario/img2.png]
+![Game Server][Game_1_Senario/img2.png]
 
 ### Senario 2
 
 The below images show a player inputting to a column that is already full (player 2) and also player 1 initiating an abrupt disconnection.
 
-![Game Clients][./Game_2_Senario/img1.png]
+![Game Clients][Game_2_Senario/img1.png]
 
-![Game Server][./Game_2_Senario/img2.png]
+![Game Server][Game_2_Senario/img2.png]
 
 ### Senario 3
 
 The below images show a player winning a game.
 
-![Game Clients][./Game_2_Senario/img1.png]
+![Game Clients][Game_2_Senario/img1.png]
 
-![Game Server][./Game_2_Senario/img2.png]
+![Game Server][Game_2_Senario/img2.png]
