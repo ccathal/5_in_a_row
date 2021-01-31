@@ -36,7 +36,7 @@ Bash scripts are provided under the ```src/``` directory. The user should run al
 
 As stated above, unit testing of the ```Game.java``` class tests all methods of the class. Tests for boundary conditions and exceptions thrown are carfully implemented. 
 
-The Junit tests implemented are independent of counter, heigth and width variables chosen. The default for the below test are values 5, 9 and 6 as specified in the instructions. 
+The Junit tests implemented are independent of counter, heigth and width variables chosen. The default for the below test are values 5, 6 and 9 as specified in the instructions. 
 
 Note: methods in the ```Game.java``` class that count the number of counters in a row are declared public for testing purposes. Ideally, these methods should be declared private as the method ```checkWin()``` calls these methods locally.
 
@@ -48,22 +48,28 @@ Note: methods in the ```Game.java``` class that count the number of counters in 
 
 The below images show initiating the Client-Server connection, client valid and invalid inputs and a client forefitting the game by 'end' input.
 
+Client Output:
 ![Game Clients](Images/Game_1_Senario/img1.png)
 
+Server Output:
 ![Game Server](Images/Game_1_Senario/img2.png)
 
 ### Senario 2
 
 The below images show a player inputting to a column that is already full (player 2) and also player 1 initiating an abrupt disconnection.
 
+Client Output:
 ![Game Clients](Images/Game_2_Senario/img1.png)
 
+Server Output:
 ![Game Server](Images/Game_2_Senario/img2.png)
 
 ### Senario 3
 
 The below images show a player winning a game.
 
+Client Output:
 ![Game Clients](Images/Game_2_Senario/img1.png)
 
+Server Output:
 ![Game Server](Images/Game_2_Senario/img2.png)
