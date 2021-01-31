@@ -40,7 +40,7 @@ The Junit tests implemented are independent of counter, heigth and width variabl
 
 Note: methods in the ```Game.java``` class that count the number of counters in a row are declared public for testing purposes. Ideally, these methods should be declared private as the method ```checkWin()``` calls these methods locally.
 
-![JUnit Tests Output](Images/Testing_Output/img1.png)
+![JUnit Tests Output](Images/Testing_Output/img1.PNG)
 
 ## Example Game Senarios
 
