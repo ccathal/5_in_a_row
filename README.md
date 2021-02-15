@@ -22,7 +22,7 @@ All socket connection failures are taken care of through catching of IOException
 
 If a invalid input occurs from the client (e.g String input for the game or index out of range), the client side code should always catch the error and print a corresponding message. The server side also checks for such errors to ensure no modification of the client side code has occured to penetrate the server.
 
-If the client wishes forefit the game, the can enter 'end' when their turn becomes available.The server deals with the message, informing the other client that they are the nominated winner and all connections close safely.
+If the client wishes forefit the game, the client can enter 'end' when their turn becomes available.The server deals with the message, informing the other client that they are the nominated winner and all connections close safely.
 
 ## Running The Program
 
