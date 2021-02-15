@@ -7,7 +7,7 @@ This project is based off the well-known 2 player Connect-4 game and the task is
 Instructions include:
 * The winner of the game connects 5 counters.
 * The width of the game board is 9.
-* The heigth of the game board is 5.
+* The heigth of the game board is 6.
 
 The ```src/Game/Game.java``` class has been extended to allow heigth, width and counter variations of all values with the only restriction being that the counter value cannot be larger than the width or heigth. The Game.java program checks for this (server side) and will throw an exception if the user does not operate within this constraint throwing a custom InvalidServerGameInputException. To change these default values a user can amended the main method of the ```src/Server/Server.java``` class.
 
